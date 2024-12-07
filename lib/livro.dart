@@ -41,13 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String errorMessage = "";
   TextEditingController searchController = TextEditingController();
 
-  final Map<String, String> bookImages = {
-    'Livro 1': 'assets/livro1.jpg', // Nome do livro => caminho da imagem
-    'Livro 2': 'assets/livro2.jpg',
-    'Livro 3': 'assets/livro3.jpg',
-    // Adicione mais livros e imagens conforme necessário
-  };
-
   @override
   void initState() {
     super.initState();
@@ -58,8 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> fetchData() async {
-    final response =
-        await http.get(Uri.parse('https://arquivos.ectare.com.br/livros.json'));
+    final response = await http.get(Uri.parse('https://arquivos.ectare.com.br/livros.json'));
 
     if (response.statusCode == 200) {
       final decodedData = utf8.decode(response.bodyBytes);
@@ -80,8 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     String query = searchController.text.toLowerCase();
     setState(() {
       filteredData = data.where((book) {
-        return book['titulo'].toLowerCase().contains(query) ||
-            book['autor'].toLowerCase().contains(query);
+        return book['titulo'].toLowerCase().contains(query) || book['autor'].toLowerCase().contains(query);
       }).toList();
     });
   }
@@ -117,26 +108,21 @@ class _MyHomePageState extends State<MyHomePage> {
                             itemCount: filteredData.length,
                             itemBuilder: (context, index) {
                               var book = filteredData[index];
-                              String imagePath = bookImages[book['titulo']] ??
-                                  'assets/livro1.jpg'; // Usando imagem local
                               return Card(
                                 margin: EdgeInsets.all(8.0),
                                 elevation: 5.0,
                                 child: ListTile(
                                   contentPadding: EdgeInsets.all(10),
-                                  leading: Image.asset(imagePath,
-                                      width: 50, height: 70, fit: BoxFit.cover),
-                                  title: Text(book['titulo'],
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
+                                  leading: book['imagem'] != null
+                                      ? Image.network(book['imagem'], width: 50, height: 70, fit: BoxFit.cover)
+                                      : null,
+                                  title: Text(book['titulo'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   subtitle: Text(book['autor']),
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => BookDetailPage(
-                                            book: book, imagePath: imagePath),
+                                        builder: (context) => BookDetailPage(book: book),
                                       ),
                                     );
                                   },
@@ -153,9 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class BookDetailPage extends StatelessWidget {
   final dynamic book;
-  final String imagePath;
 
-  BookDetailPage({required this.book, required this.imagePath});
+  BookDetailPage({required this.book});
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +153,9 @@ class BookDetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
-            Image.asset(imagePath, height: 250, fit: BoxFit.cover),
+            book['imagem'] != null
+                ? Image.network(book['imagem'], height: 250, fit: BoxFit.cover)
+                : Container(),
             SizedBox(height: 10),
             Text(
               book['titulo'],
