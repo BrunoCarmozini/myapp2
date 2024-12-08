@@ -42,11 +42,18 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController searchController = TextEditingController();
 
   final Map<String, String> bookImages = {
-    'Livro 1': 'assets/livro1.jpg', // Nome do livro => caminho da imagem
-    'Livro 2': 'assets/livro2.jpg',
-    'Livro 3': 'assets/livro3.jpg',
-    // Adicione mais livros e imagens conforme necessário
-  };
+  'Dom Quixote': 'assets/livro1.jpg',
+  'Orgulho e Preconceito': 'assets/livro2.jpg',
+  '1984': 'assets/livro3.jpg',
+  'O Senhor dos Anéis': 'assets/livro4.jpg',
+  'A Guerra e a Paz': 'assets/livro5.jpg',
+  'O Pequeno Príncipe': 'assets/livro6.jpg',
+  'Moby Dick': 'assets/livro7.jpg',
+  'A Revolução dos Bichos': 'assets/livro8.jpg',
+  'O Código Da Vinci': 'assets/livro9.jpg',
+  'Cem Anos de Solidão': 'assets/livro10.jpg',
+};
+
 
   @override
   void initState() {
@@ -117,15 +124,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             itemCount: filteredData.length,
                             itemBuilder: (context, index) {
                               var book = filteredData[index];
-                              String imagePath = bookImages[book['titulo']] ??
-                                  'assets/livro1.jpg'; // Usando imagem local
                               return Card(
                                 margin: EdgeInsets.all(8.0),
                                 elevation: 5.0,
                                 child: ListTile(
                                   contentPadding: EdgeInsets.all(10),
-                                  leading: Image.asset(imagePath,
-                                      width: 50, height: 70, fit: BoxFit.cover),
                                   title: Text(book['titulo'],
                                       style: TextStyle(
                                           fontSize: 18,
@@ -136,7 +139,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => BookDetailPage(
-                                            book: book, imagePath: imagePath),
+                                          book: book,
+                                          imagePath:
+                                              bookImages[book['titulo']] ??
+                                                  'assets/oi.png',
+                                        ),
                                       ),
                                     );
                                   },

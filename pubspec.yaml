@@ -60,7 +60,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - assets/livro1.jpg
+    - assets/livro2.jpg
+    - assets/livro3.jpg
+    - assets/livro4.jpg
+    - assets/livro5.jpg
+    - assets/oi.png
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
